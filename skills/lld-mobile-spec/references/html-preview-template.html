@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SPAC: [Feature Name]</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      color: #1a1a1a;
+      background: #f5f5f5;
+      padding: 24px 16px 64px;
+    }
+
+    .page {
+      max-width: 860px;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+      padding: 40px 48px;
+    }
+
+    /* Print button */
+    .print-bar {
+      max-width: 860px;
+      margin: 0 auto 16px;
+      text-align: right;
+    }
+    .print-bar button {
+      background: #1a1a1a;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 16px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    @media print {
+      body { background: #fff; padding: 0; }
+      .page { box-shadow: none; border-radius: 0; padding: 20px; }
+      .print-bar { display: none; }
+    }
+
+    /* Header */
+    .spac-title { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+    .spac-title .feature-name { color: #1a1a1a; }
+
+    /* Status badge */
+    .status-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 24px;
+    }
+    .status-draft  { background: #FEF3C7; color: #92400E; }
+    .status-ready  { background: #D1FAE5; color: #065F46; }
+
+    /* Metadata block */
+    .meta-block {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 8px 24px;
+      background: #f9f9f9;
+      border: 1px solid #e8e8e8;
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin-bottom: 36px;
+      font-size: 13px;
+    }
+    .meta-row { display: flex; gap: 6px; }
+    .meta-label { color: #666; white-space: nowrap; }
+    .meta-value { color: #1a1a1a; font-weight: 500; }
+
+    /* Sections */
+    h2 {
+      font-size: 18px;
+      font-weight: 700;
+      color: #1a1a1a;
+      margin: 36px 0 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #e8e8e8;
+    }
+    h3 {
+      font-size: 15px;
+      font-weight: 600;
+      color: #333;
+      margin: 20px 0 8px;
+    }
+    p { margin-bottom: 12px; color: #333; }
+    ul, ol { padding-left: 20px; margin-bottom: 12px; color: #333; }
+    li { margin-bottom: 4px; }
+
+    /* Not required placeholder */
+    .not-required {
+      color: #999;
+      font-style: italic;
+      font-size: 14px;
+      padding: 8px 12px;
+      background: #fafafa;
+      border-radius: 4px;
+      border-left: 3px solid #e0e0e0;
+    }
+
+    /* TBD callout */
+    .callout-tbd {
+      background: #FFFBEB;
+      border-left: 4px solid #F59E0B;
+      border-radius: 0 6px 6px 0;
+      padding: 10px 14px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #92400E;
+    }
+
+    /* Assumption callout */
+    .callout-assumption {
+      background: #EFF6FF;
+      border-left: 4px solid #3B82F6;
+      border-radius: 0 6px 6px 0;
+      padding: 10px 14px;
+      margin: 10px 0;
+      font-size: 14px;
+      color: #1E40AF;
+    }
+
+    /* Open questions */
+    .open-questions-list {
+      list-style: none;
+      padding: 0;
+    }
+    .open-questions-list li {
+      padding: 8px 12px 8px 16px;
+      border-left: 3px solid #F59E0B;
+      margin-bottom: 8px;
+      background: #FFFBEB;
+      border-radius: 0 6px 6px 0;
+      font-size: 14px;
+      color: #333;
+    }
+    .open-questions-list li::before {
+      content: counter(oq) ". ";
+      counter-increment: oq;
+      font-weight: 600;
+      color: #92400E;
+    }
+    .open-questions-list { counter-reset: oq; }
+
+    /* Tables */
+    .table-wrap { overflow-x: auto; margin: 12px 0; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    thead { background: #f0f0f0; }
+    th {
+      text-align: left;
+      padding: 8px 10px;
+      font-weight: 600;
+      color: #333;
+      border-bottom: 2px solid #e0e0e0;
+      white-space: nowrap;
+    }
+    td {
+      padding: 7px 10px;
+      border-bottom: 1px solid #f0f0f0;
+      color: #444;
+      vertical-align: top;
+    }
+    tr:nth-child(even) td { background: #fafafa; }
+    /* Confidence badges in tables */
+    .conf-high   { color: #065F46; background: #D1FAE5; padding: 2px 6px; border-radius: 4px; font-size: 12px; }
+    .conf-medium { color: #92400E; background: #FEF3C7; padding: 2px 6px; border-radius: 4px; font-size: 12px; }
+    .conf-low    { color: #991B1B; background: #FEE2E2; padding: 2px 6px; border-radius: 4px; font-size: 12px; }
+    .conf-verify { color: #4B5563; background: #F3F4F6; padding: 2px 6px; border-radius: 4px; font-size: 12px; }
+
+    /* Checklist */
+    .checklist { list-style: none; padding: 0; }
+    .checklist li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 5px 0;
+      font-size: 14px;
+      color: #333;
+      border-bottom: 1px solid #f5f5f5;
+    }
+    .checklist input[type="checkbox"] {
+      margin-top: 3px;
+      flex-shrink: 0;
+      accent-color: #059669;
+    }
+
+    /* Footer */
+    .spac-footer {
+      margin-top: 48px;
+      padding-top: 16px;
+      border-top: 1px solid #e8e8e8;
+      font-size: 12px;
+      color: #999;
+      text-align: center;
+    }
+
+    code {
+      font-family: "SF Mono", "Fira Code", monospace;
+      background: #f4f4f4;
+      padding: 1px 5px;
+      border-radius: 3px;
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="print-bar">
+  <button onclick="window.print()">Print / Save as PDF</button>
+</div>
+
+<div class="page">
+
+  <!-- Title & status -->
+  <h1 class="spac-title">SPAC: <span class="feature-name">[Feature Name]</span></h1>
+  <!-- Replace class with status-draft or status-ready -->
+  <span class="status-badge status-ready">✅ READY</span>
+
+  <!-- Metadata block -->
+  <div class="meta-block">
+    <div class="meta-row"><span class="meta-label">Team:</span><span class="meta-value">[React Native | Native iOS / Android]</span></div>
+    <div class="meta-row"><span class="meta-label">Author:</span><span class="meta-value">[name]</span></div>
+    <div class="meta-row"><span class="meta-label">Reviewer:</span><span class="meta-value">[name or TBD]</span></div>
+    <div class="meta-row"><span class="meta-label">Last updated:</span><span class="meta-value">[YYYY-MM-DD]</span></div>
+    <div class="meta-row"><span class="meta-label">Confidence:</span><span class="meta-value">[n]%</span></div>
+    <div class="meta-row"><span class="meta-label">UI mapping confidence:</span><span class="meta-value">[High/Medium/Low]</span></div>
+    <div class="meta-row"><span class="meta-label">Codebase context:</span><span class="meta-value">[Connected/Partial/Not available]</span></div>
+    <div class="meta-row"><span class="meta-label">Repository:</span><span class="meta-value">[workspace/project/repo or N/A]</span></div>
+    <div class="meta-row"><span class="meta-label">Branch:</span><span class="meta-value">[branch or N/A]</span></div>
+    <div class="meta-row"><span class="meta-label">Module/Path:</span><span class="meta-value">[path or N/A]</span></div>
+    <div class="meta-row"><span class="meta-label">Docs used:</span><span class="meta-value">[CLAUDE.md, README.md, ... or N/A]</span></div>
+  </div>
+
+  <!-- ===================== SECTIONS ===================== -->
+
+  <h2>1. Feature overview</h2>
+  <p>[Feature overview paragraph from SPAC]</p>
+
+  <h2>2. Target users</h2>
+  <ul>
+    <li><strong>Role:</strong> [value]</li>
+    <li><strong>Auth state:</strong> [value]</li>
+    <li><strong>Platform:</strong> [iOS / Android / both]</li>
+  </ul>
+
+  <h2>3. Problem statement</h2>
+  <p>[Problem statement from SPAC]</p>
+
+  <h2>4. Goals</h2>
+  <ul>
+    <li>[Goal 1]</li>
+    <li>[Goal 2]</li>
+  </ul>
+
+  <h2>5. Out of scope</h2>
+  <ul>
+    <li>[Out of scope item]</li>
+  </ul>
+
+  <h2>6. Entry points</h2>
+  <ul>
+    <li>[Entry point]</li>
+  </ul>
+
+  <h2>7. User flow</h2>
+  <h3>Happy path</h3>
+  <ol>
+    <li>[Step 1]</li>
+    <li>[Step 2]</li>
+  </ol>
+
+  <h2>8. UI requirements</h2>
+  <p>[UI requirements from SPAC. Render TBD blocks as amber callouts and assumptions as blue callouts.]</p>
+  <div class="callout-tbd">⚠️ TBD: [description of what is missing]</div>
+  <div class="callout-assumption">Assumption: [the assumed behavior]</div>
+
+  <h2>9. UI element data mapping</h2>
+  <h3>Screen: [Screen Name]</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>UI element</th>
+          <th>Type</th>
+          <th>Display rule</th>
+          <th>Data source</th>
+          <th>API field</th>
+          <th>Fallback</th>
+          <th>Confidence</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>[Element name]</td>
+          <td>[Text/Button/etc.]</td>
+          <td>[Always visible / condition]</td>
+          <td>[Service/Static/etc.]</td>
+          <td><code>[field.path]</code></td>
+          <td>[fallback or hide]</td>
+          <td><span class="conf-high">High</span></td>
+          <td>[notes]</td>
+        </tr>
+        <tr>
+          <td>[Element name]</td>
+          <td>[Text/Button/etc.]</td>
+          <td>[condition]</td>
+          <td>[Source]</td>
+          <td><code>[field.path]</code></td>
+          <td>[fallback]</td>
+          <td><span class="conf-verify">Need to verify</span></td>
+          <td>[notes]</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>10. UI states</h2>
+  <h3>Loading state</h3><p>[description]</p>
+  <h3>Empty state</h3><p>[description]</p>
+  <h3>Error state</h3><p>[description]</p>
+  <h3>Success state</h3><p>[description]</p>
+
+  <h2>11. Data &amp; backend dependencies</h2>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Service / API</th><th>Endpoint</th><th>Method</th><th>Purpose</th><th>Contract source</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>[Service]</td><td><code>[/path]</code></td><td>[GET/POST]</td><td>[purpose]</td><td>[Backend DD / TBD]</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>12. Validation rules</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Field</th><th>Rule</th><th>Error message</th></tr></thead>
+      <tbody>
+        <tr><td>[Field]</td><td>[Rule]</td><td>[Message or i18n key]</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>13. Permissions</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Permission</th><th>Required</th><th>Behavior if denied</th></tr></thead>
+      <tbody>
+        <tr><td>[Permission]</td><td>[Yes/No]</td><td>[behavior]</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>14. Security &amp; privacy</h2>
+  <p>[Content or:] <span class="not-required">Not required for this feature.</span></p>
+
+  <h2>15. Accessibility</h2>
+  <p>[Content or:] <span class="not-required">Not required for this feature.</span></p>
+
+  <h2>16. Localization &amp; RTL</h2>
+  <p>[Content or:] <span class="not-required">Not required for this feature.</span></p>
+
+  <h2>17. Analytics / tracking</h2>
+  <p>[Content or:] <span class="not-required">Not required for this feature.</span></p>
+
+  <h2>18. Platform notes</h2>
+  <p>[Content or:] <span class="not-required">Not required for this feature.</span></p>
+
+  <h2>19. Project context used</h2>
+  <p>[Summary of what codebase/documentation context was used when writing this SPAC.]</p>
+
+  <h2>20. Assumptions</h2>
+  <ul>
+    <li>[Assumption 1]</li>
+    <li>[Assumption 2]</li>
+  </ul>
+
+  <h2>21. Open questions</h2>
+  <ol class="open-questions-list">
+    <li>[Open question 1]</li>
+    <li>[Open question 2]</li>
+  </ol>
+
+  <h2>22. Developer handoff checklist</h2>
+  <!-- Pre-check items based on actual SPAC content -->
+  <ul class="checklist">
+    <li><input type="checkbox" checked disabled><label>Feature goal is clear</label></li>
+    <li><input type="checkbox" checked disabled><label>Target user is defined</label></li>
+    <li><input type="checkbox" checked disabled><label>Entry point is defined</label></li>
+    <li><input type="checkbox" checked disabled><label>Happy path is defined</label></li>
+    <li><input type="checkbox" disabled><label>Bitbucket repository reference is documented</label></li>
+    <li><input type="checkbox" disabled><label>Codebase context was used or marked as unavailable</label></li>
+    <li><input type="checkbox" disabled><label>UI Element Data Mapping is included for every data-driven screen</label></li>
+    <li><input type="checkbox" disabled><label>Empty state is defined</label></li>
+    <li><input type="checkbox" disabled><label>Loading state is defined</label></li>
+    <li><input type="checkbox" disabled><label>Error states are defined</label></li>
+    <li><input type="checkbox" disabled><label>Assumptions are listed</label></li>
+    <li><input type="checkbox" disabled><label>Open questions are listed</label></li>
+    <!-- Add remaining checklist items from SPAC, checking/unchecking based on content -->
+  </ul>
+
+  <h2>23. Downstream AI usage</h2>
+  <ul>
+    <li>Frontend Technical DD → <code>dd_[feature_name].md</code></li>
+    <li>Development task breakdown → <code>tasks_[feature_name].md</code></li>
+    <li>Claude Code implementation planning</li>
+    <li>QA test case generation → <code>qa_[feature_name]_test_cases.md</code></li>
+  </ul>
+
+  <!-- Footer -->
+  <div class="spac-footer">
+    Generated by SPAC Writer skill &nbsp;·&nbsp; [YYYY-MM-DD]
+  </div>
+
+</div>
+
+</body>
+</html>

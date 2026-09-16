@@ -1,9 +1,9 @@
 ---
-name: lld-figma-spec
-description: Use this skill whenever the user wants to write a Low Level Design (LLD) / component-level specification for a web UI component based on a Figma design, for handoff to developers and QA. Trigger on phrases like "write the LLD for this component", "spec out this Figma component", "create the content and display tables for this design", "אפיין את הרכיב הזה", or whenever the user shares a Figma link/file for a web component and wants an editor-content spec plus a display/behavior spec produced from it. Produces the two-part Umbraco-CMS-oriented content-entry and display-behavior specification this team already uses, pulling real data from Figma via the Figma MCP tools when connected rather than asking the user to describe the design by hand.
+name: lld-web-figma-spec
+description: Use this skill whenever the user wants to write a Low Level Design (LLD) / component-level specification for a WEB UI component based on a Figma design, for handoff to the frontend web team and QA. Trigger on phrases like "write the LLD for this component", "spec out this Figma component", "create the content and display tables for this design", "אפיין את הרכיב הזה", or whenever the user shares a Figma link/file for a web component and wants an editor-content spec plus a display/behavior spec produced from it. Produces the two-part Umbraco-CMS-oriented content-entry and display-behavior specification this team already uses, pulling real data from Figma via the Figma MCP tools when connected rather than asking the user to describe the design by hand. For mobile (React Native / Native iOS-Android) features, use `lld-mobile-spec` instead. For backend service/API specs, use `lld-backend-spec` instead.
 ---
 
-# LLD Figma Component Spec
+# LLD Web Figma Component Spec
 
 ## What this skill does
 

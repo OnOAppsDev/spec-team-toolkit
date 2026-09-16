@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-09-16
+
+### Changed
+
+- `lld-figma-spec` renamed to `lld-web-figma-spec` for naming parity with the other team-specific LLD skills; content and behavior unchanged.
+
+### Added
+
+- `lld-mobile-spec` skill: LLD/SPAC builder for the mobile team (React Native / Native iOS-Android), ported in from an existing, already-used skill (`create-frontend-spec`) with only its name and trigger description updated to fit alongside the other skills. Interviews for requirements one question at a time, reads the repo via Bitbucket MCP to match existing conventions, and requires every silent judgment call to be marked as an explicit assumption.
+- `lld-backend-spec` skill: LLD builder for the backend team, designed from scratch (no prior team template existed). Produces endpoint contracts, a data model table, and explicit business-rule/edge-case coverage, sourcing context from the relevant HLD and a read-only codebase scan instead of a visual design tool.
+
 ## [0.2.0] - 2026-07-08
 
 ### Changed
