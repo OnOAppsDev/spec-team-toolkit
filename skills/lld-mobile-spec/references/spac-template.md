@@ -71,13 +71,33 @@ Use this template when writing Phase 13. Fill every section from your gathered i
 
 ### Happy Path
 
-1. [Step 1]
-2. [Step 2]
-3. [Step 3 — success state]
+Each step must capture: what the user does, what the app does in response, whether a backend service is invoked (and which), and how the result affects the next step or UI state. Do not describe this only as a sequence of screens or taps — a developer must be able to infer end-to-end app behavior, including state changes, from this alone.
+
+1. **User action:** [what the user does] → **App response:** [what happens] → **Backend call:** [service/API invoked, or "none"] → **Effect on next step/state:** [how the result changes what the user sees or can do next]
+2. [Step 2, same structure]
+3. [Step 3 — success state, same structure]
 
 ### Alternative Flows
 
-[Describe any secondary paths, conditional branches, or role-specific variations.]
+[Describe any secondary paths, conditional branches, or role-specific variations, using the same user action / app response / backend call / state-effect structure where relevant.]
+
+### State Transitions (optional)
+
+Only for screens with complex state-dependent behavior that the Happy Path and Section 10 — UI States can't describe clearly on their own (e.g. a multi-step flow with several interdependent states). Skip this subsection entirely for simple screens — write `Not required for this screen.`
+
+When needed, add a Mermaid `stateDiagram-v2` block describing the states and transitions:
+
+````md
+```mermaid
+stateDiagram-v2
+    [*] --> Loading
+    Loading --> Loaded
+    Loading --> Error
+    Error --> Loading : retry
+```
+````
+
+If a diagram-capable MCP tool is connected (draw.io, or Figma's `generate_diagram` as a fallback — it also accepts `stateDiagram-v2` syntax), use it to render the diagram and link the result here. If no such tool is connected, keep the Mermaid code block directly in this section — it renders inline in most Markdown viewers — rather than skipping the diagram.
 
 ---
 
@@ -87,7 +107,9 @@ Use this template when writing Phase 13. Fill every section from your gathered i
 
 [Describe the layout, visible elements, actions, and any conditional visibility rules.]
 
-> ⚠️ TBD: [Use this format for any unknown or unconfirmed requirement.]
+**Every interactive/clickable element must state exactly what happens when it's activated** — the navigation target, the API call triggered, the state change, the modal opened, etc. Never describe an element only by its type (e.g. "button"); say what pressing it actually does. If the behavior is unknown, mark that specific element with the TBD format below rather than omitting it.
+
+> ⚠️ TBD: [Use this format for any unknown or unconfirmed requirement — including an interactive element whose click/activation behavior isn't known yet.]
 
 > Assumption: [Use this format for any assumption made in absence of confirmation. Also add this same assumption as a line item in Section 20 — Assumptions, so it's never only implied here.]
 
@@ -95,11 +117,13 @@ Use this template when writing Phase 13. Fill every section from your gathered i
 
 ## 9. UI Element Data Mapping
 
+For every mapped element, verify whether the API value can be displayed directly or needs transformation first — code-to-label conversion, lookup-table resolution, formatting, concatenation, calculation, localization, unit conversion, sorting, or filtering. Do not assume a backend code has the same meaning or representation as the user-facing value; note any such transformation in the Notes column. If it isn't documented, mark it `Need to verify` there instead of assuming a 1:1 mapping.
+
 ### Screen: [Screen Name]
 
 | UI Element | Element Type | Screen / Frame | Display Rule | Data Source | Backend/API Field | Fallback / Empty Value | Confidence | Notes |
 |---|---|---|---|---|---|---|---|---|
-| [Element name] | [Text/Button/Image/Badge/etc.] | [Frame name] | [Always visible / condition] | [Service/API/Static/Local state/Derived] | [field.path or N/A] | [fallback or hide] | [High/Medium/Low/Need to verify] | [notes] |
+| [Element name] | [Text/Button/Image/Badge/etc.] | [Frame name] | [Always visible / condition] | [Service/API/Static/Local state/Derived] | [field.path or N/A] | [fallback or hide] | [High/Medium/Low/Need to verify] | [notes — including any transformation/mapping logic needed to go from the raw API value to the displayed value] |
 
 ---
 
@@ -115,7 +139,14 @@ Use this template when writing Phase 13. Fill every section from your gathered i
 
 ### Error State
 
-[Describe error handling: API failure, network error, validation error, permission denied, session expired.]
+Describe the *functional* application behavior, not only the displayed error message. For each relevant error case (API failure, network error, validation error, permission denied, session expired, partial-failure), cover:
+
+- Whether existing data/state is preserved or cleared
+- Whether the user can retry, and what exactly is retried (the whole action, just the failed call, etc.)
+- Whether navigation is blocked while the error is showing
+- Whether different error responses require different behavior (e.g. permission-denied vs. validation vs. network timeout)
+
+Do not invent error-handling behavior that isn't supported by the available sources — mark `TBD`/`Need to verify` instead.
 
 ### Success State
 
@@ -129,11 +160,17 @@ Use this template when writing Phase 13. Fill every section from your gathered i
 
 ## 11. Data & Backend Dependencies
 
-| Service / API | Endpoint | Method | Purpose | Contract Source |
-|---|---|---|---|---|
-| [Service name] | [/path/to/endpoint] | [GET/POST/etc.] | [what it does] | [Backend DD / TBD] |
+For every backend dependency, describe not only what data it provides, but when it's invoked, what request data is sent, which response data is consumed, and how the app processes the response — including any parsing/mapping logic (e.g. resolving codes to labels, building a tree from a flat list). This is where non-trivial response-handling logic belongs — don't leave it implied by the UI description alone.
+
+| Service / API | Endpoint | Method | When Invoked | Request Data | Response Data Consumed | Response Processing | Purpose | Contract Source |
+|---|---|---|---|---|---|---|---|---|
+| [Service name] | [/path/to/endpoint] | [GET/POST/etc.] | [on screen load / on user action / polling / etc.] | [key request fields] | [key response fields used] | [parsing/mapping logic, or "used as-is"] | [what it does] | [Backend DD / TBD] |
 
 > ⚠️ TBD: [Use for unknown endpoints.]
+
+> ⚠️ For every backend-driven UI element, verify whether the API value can be displayed directly or requires transformation before presentation (code-to-label conversion, lookup-table resolution, formatting, concatenation, calculation, localization, unit conversion, sorting, filtering, or other derived display logic). Do not assume a backend code has the same meaning or representation as the user-facing value. If the transformation isn't documented, mark it `Need to verify`.
+
+> ⚠️ For every collection or list returned by the backend, consider boundary and volume behavior: the expected behavior for an empty collection, a single item, and a large number of items, and — where relevant — pagination, scrolling, result limits, truncation, "show more", search/filter behavior, sorting, and performance-related constraints. Do not invent limits or pagination behavior; mark it `TBD` / Open Question if it can't be determined from Figma, requirements, API documentation, or the existing implementation.
 
 ---
 
@@ -276,11 +313,14 @@ List every assumption made anywhere in this document — including small UI/beha
 - [ ] Accessibility behavior is defined or marked as not required
 - [ ] Localization/RTL behavior is defined or marked as not required
 - [ ] Backend/API dependencies are defined or marked as TBD
+- [ ] Every critical backend dependency has a real contract (IDD/OpenAPI/other API doc/full request-response) or is listed in Open Questions blocking READY
+- [ ] Every interactive element in UI Requirements states its click/activation behavior, or is marked TBD
 - [ ] Figma frames/components are referenced or marked as not provided
 - [ ] Screenshots are referenced if Figma was not available
 - [ ] Analytics/tracking is confirmed as required or not required
 - [ ] Every assumption (including UI judgment calls like hidden/disabled elements) is listed in Section 20 — none left implicit
 - [ ] Open questions are listed
+- [ ] Coverage was verified against all in-scope source material (every relevant screen, interactive element, UI state, user action, backend dependency, and business rule is represented or explicitly out of scope)
 
 ---
 

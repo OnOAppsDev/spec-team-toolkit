@@ -434,7 +434,7 @@ Work through these topics in order, one question per turn. Skip any topic alread
 > "What should the user see when there's no data yet?"
 
 **11. Error states**
-> "What are the error cases — API failure, validation errors, permission denied, network unavailable, session expired?"
+> "What are the error cases — API failure, validation errors, permission denied, network unavailable, session expired? For each, what happens functionally — is data kept or cleared, can the user retry, is navigation blocked?"
 
 **12. Loading states**
 > "Are there loading states to design, or does the data load fast enough to skip them?"
@@ -443,8 +443,9 @@ Work through these topics in order, one question per turn. Skip any topic alread
 > "Are there permission levels that affect what a user can see or do?"
 
 **14. Backend / APIs**
-> "Which backend services or APIs does this touch?"
+> "Which backend services or APIs does this touch? For each: when is it called, and is there any non-trivial logic in how the response gets parsed or mapped into what's shown on screen?"
 Skip if fully covered by an uploaded Backend DD.
+> "For any critical API this feature depends on, is there a contract available — an IDD, OpenAPI/Swagger doc, other API documentation, or a full request/response example? This feature can't be marked READY without one."
 
 **15. Overlap**
 > "Does this replace, extend, or overlap with any existing feature?"
@@ -1046,6 +1047,8 @@ references/spac-template.md
 
 Read this template before writing Phase 13.
 
+Immediately after writing or substantively updating this file, also run **Phase 15 — HTML Preview** against the current (DRAFT) content, tagged with the 🟡 DRAFT badge. The HTML is the primary review artifact — a raw `.md` file is hard for a human reviewer to approve, so don't make the HTML wait for READY.
+
 ---
 
 ## SPAC Writing Rules
@@ -1059,6 +1062,9 @@ A developer should be able to understand the desired frontend behavior without a
 * Do not invent requirements.
 * Clearly mark unknown items as TBD.
 * Clearly mark assumptions.
+* **Every interactive/clickable element in UI Requirements must state exactly what happens when it's activated** — not just its type ("button"). If the click/activation behavior isn't known, mark that element TBD rather than describing only its appearance.
+* **User Flow must tie each step to system behavior, not just describe a sequence of screens.** For each meaningful step: what the user does, what the app does in response, whether a backend service is invoked, and how the result affects the next step or UI state.
+* **Do not invent error-handling or response-processing behavior** that isn't supported by the available sources — mark `TBD`/`Need to verify` and add to Open Questions instead.
 * **Never silently decide product/UI behavior.** If, in the absence of an explicit requirement, you decide how something should behave — including things like hiding a button, disabling an action, removing an element, defaulting a value, choosing an error message, or picking a state transition — that decision is an assumption. It must be written into the Assumptions section (Section 20) as its own line item, not just implied by how a screen or flow is described. The bar is: if you made a judgment call the user didn't give you, it goes in the list.
 * Every UI state mentioned must describe what the user sees.
 * Reference Figma frames/components by name if extracted, and always include a clickable Figma node link next to screen headings in UI Requirements and UI Element Data Mapping.
@@ -1556,6 +1562,8 @@ Verify that:
 * [ ] UI Element Data Mapping exists for every data-driven screen
 * [ ] Every dynamic UI element has a data source or is marked `Need to verify`
 * [ ] Important `Need to verify` items are also listed in Open Questions
+* [ ] Every interactive element in UI Requirements states its click/activation behavior, or is marked TBD
+* [ ] Every critical backend dependency has a real contract (IDD/OpenAPI/other API doc/full request-response) or is listed in Open Questions blocking READY
 * [ ] All assumptions are listed in the Assumptions section
 * [ ] No judgment call (hidden/removed/disabled elements, defaults, fallback behavior, etc.) was made in the SPAC without a corresponding entry in the Assumptions section
 * [ ] Analytics / Tracking is either defined or marked as not required
@@ -1570,11 +1578,15 @@ Verify that:
 
 If anything is missing, fix the SPAC before presenting it.
 
+### Coverage verification
+
+Before presenting the SPAC, verify coverage against all in-scope source material (Figma frames, requirements doc, Backend DD, interview answers): confirm every relevant screen/frame, interactive element, significant UI state, user action, backend dependency, and documented business rule is either represented in the SPAC or explicitly marked out of scope in Section 5. Do not invent coverage — if something from the source material didn't make it in and isn't out of scope, add it as a new Open Question rather than dropping it silently.
+
 After writing, tell the user in chat:
 
-> "SPAC is saved as **DRAFT**. When you've reviewed it and it's ready for developers, just say 'mark it ready' and I'll update the status to ✅ READY, generate an HTML preview for stakeholder review, and create a DD starter file for the development team."
+> "SPAC is saved as **DRAFT** — I've generated both the `.md` and an HTML preview. Review the HTML, it's the readable version for sign-off; the `.md` is the same content in source form. When you're happy with it and it's ready for developers, just say 'mark it ready' and I'll update the status to ✅ READY and create a DD starter file for the development team."
 
-Always present the generated file to the user for download.
+Always present both the `.md` and the HTML preview to the user for download.
 
 If the environment supports `present_files`, call `present_files`.
 
@@ -1590,7 +1602,9 @@ When the user says:
 * "approved for development"
 * "ready for developers"
 
-Then:
+**Precondition:** if the feature depends on backend APIs, check Section 11 — every critical endpoint must have a real contract (an IDD, OpenAPI/Swagger doc, other API documentation, or a full request/response the user supplied). If a critical endpoint has no such contract, do not mark READY — tell the user which endpoint(s) are missing a contract, keep (or add) it as an Open Question, and wait for either the contract or an explicit override before proceeding.
+
+Otherwise:
 
 1. Re-open the file.
 2. Change:
@@ -1623,7 +1637,7 @@ to:
 ```
 
 7. Save the updated SPAC file.
-8. Run **Phase 15 — HTML Preview**.
+8. Re-run **Phase 15 — HTML Preview** against the READY content to refresh the badge from 🟡 DRAFT to ✅ READY (the HTML file already exists from DRAFT — this just re-renders it, it isn't being generated for the first time).
 9. Run **Phase 16 — DD Starter**.
 10. Present all three files together using `present_files`:
     * `spac_<feature_name>.md` — the READY SPAC
@@ -1644,9 +1658,7 @@ This file is for **humans** — product managers, designers, QA leads, and busin
 
 ### When to generate
 
-Generate this file immediately after marking the SPAC as ✅ READY.
-
-Do not generate it for DRAFT SPACs unless the user explicitly asks.
+Generate this file every time the SPAC `.md` is written or substantively updated — including while it's still 🟡 DRAFT, not only after marking it ✅ READY. The HTML is the primary artifact a human reviewer approves; don't make it wait for READY. Re-run it again when the status flips to ✅ READY, so the badge reflects the current status.
 
 ### Output path
 
@@ -1734,10 +1746,13 @@ For sections marked "Not required for this feature", render a muted placeholder 
 * Analytics / Tracking must be asked about, not forced.
 * The SPAC should describe product and frontend behavior.
 * The Frontend Technical DD should describe detailed implementation.
-* After writing the SPAC, always present the file so the user can download it.
-* When marking READY, always generate the HTML preview (Phase 15).
-* Always present both files together on READY: the SPAC `.md` and the HTML preview.
+* After writing the SPAC, always present both the `.md` and the HTML preview so the user can download and review them.
+* Always generate the HTML preview alongside every DRAFT write, not only at READY (Phase 15) — it's the artifact humans actually review.
+* When marking READY, re-run Phase 15 to refresh the badge; the file already exists from DRAFT.
+* Never mark READY if a critical backend dependency has no real contract — refuse and keep it as an Open Question instead.
 * The HTML preview is for human stakeholder review — keep it clean, readable, and self-contained.
+* Every interactive element in UI Requirements must state its click/activation behavior, or be marked TBD — never just its type.
+* Before presenting the SPAC, verify coverage against all in-scope source material — every relevant screen, element, state, action, dependency, and rule is represented or explicitly out of scope.
 
 ---
 

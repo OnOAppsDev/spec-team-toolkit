@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-09-27
+
+### Changed
+
+- `lld-mobile-spec`: the HTML preview is now generated alongside every DRAFT write, not only after marking READY — the HTML is the artifact reviewers actually approve, so it no longer waits for READY.
+- `lld-mobile-spec`: marking a feature READY is now blocked if a critical backend dependency has no real contract (IDD, OpenAPI/Swagger, other API doc, or a full request/response) — it's kept as an Open Question instead.
+- `lld-mobile-spec`: User Flow (§7) now requires each step to name the user action, the app's response, any backend call, and the resulting state/UI effect, instead of a plain screen-to-screen sequence; added an optional State Transitions subsection (Mermaid `stateDiagram-v2`) for complex, state-heavy screens.
+- `lld-mobile-spec`: UI Requirements (§8) now requires every interactive element to state exactly what happens on activation, not just its type.
+- `lld-mobile-spec`: Data & Backend Dependencies (§11) and UI States → Error State (§10) now require invocation timing, request/response handling, response-transformation logic, and functional error behavior (data preservation, retry, navigation blocking) instead of just an endpoint list and error message.
+- `lld-mobile-spec` and `lld-web-figma-spec`: both now require a final coverage-verification pass against all in-scope source material before presenting the document for approval.
+- `lld-web-figma-spec`: API-sourced display elements now require invocation timing and success/empty/error/partial-failure behavior in the logic column, in addition to the existing empty/overlong/malformed content edge cases.
+
 ## [0.3.0] - 2026-09-16
 
 ### Changed

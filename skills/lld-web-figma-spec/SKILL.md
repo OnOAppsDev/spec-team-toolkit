@@ -26,13 +26,15 @@ The exact rules for both parts — table columns, wording conventions, and sever
 
 3. **Draft Part 1** using the field-table columns and rules in the reference file (field ID, name, type as a real Umbraco editor, description, required?, recommended validation, notes for the content editor). Give each list of repeating sub-components its own table.
 
-4. **Draft Part 2** using the element-table columns in the reference file (element description, content source, logic including edge cases, responsiveness, accessibility, visual reference). Cover the required edge cases explicitly: empty content, overlong content, malformed content. Only note responsiveness where Desktop↔Mobile genuinely differs, and only note accessibility for things Figma or the dev environment doesn't already enforce automatically (heading tag levels, disabled-state behavior, skip-to-content, and similar — not color contrast or text size if those are already handled in the Figma design).
+4. **Draft Part 2** using the element-table columns in the reference file (element description, content source, logic including edge cases, responsiveness, accessibility, visual reference). Cover the required edge cases explicitly: empty content, overlong content, malformed content. For any element sourced from an external API, also cover in the logic column: when the API is invoked, what triggers a refetch, and how success/empty/error/partial-failure responses change the element's behavior — don't assume the raw API value maps 1:1 to what's displayed; note any transformation/mapping logic explicitly or mark it unverified, per the reference file's convention. Only note responsiveness where Desktop↔Mobile genuinely differs, and only note accessibility for things Figma or the dev environment doesn't already enforce automatically (heading tag levels, disabled-state behavior, skip-to-content, and similar — not color contrast or text size if those are already handled in the Figma design).
 
 5. **Apply the special-content rules** from the reference file wherever relevant:
    - Lists with pagination, horizontal scroll, or carousels — spec the responsive and accessible behavior of the paging mechanism explicitly, not just the content it paginates.
    - Dates/times — include the human-readable conversion logic with Hebrew examples (e.g. "לפני 3 שעות", "אתמול").
 
 6. **No appendices.** Every note belongs inside the Part 1 or Part 2 table it's relevant to. A note parked at the end of the document leaves the developer guessing which element it applies to — fold it into the right row instead.
+
+7. **Verify coverage before presenting.** Before handing over the document, confirm that every Figma frame/component, interactive element, and content rule identified during classification (step 2) is either represented in Part 1 or Part 2, or explicitly noted as out of scope. Don't invent coverage — if something from the source material didn't make it in, add it back or flag it rather than dropping it silently.
 
 ## Output
 
