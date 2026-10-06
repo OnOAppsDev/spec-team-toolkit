@@ -1,6 +1,6 @@
 {
   "name": "spec-team-toolkit",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "HLD and LLD document builders for the spec team: builds a High Level Design incrementally across sessions with a fixed discovery script and self-QA before customer delivery, and produces team-specific LLDs — a web component spec from Figma, a mobile (React Native/Native) feature spec, and a backend service/API spec.",
   "author": {
     "name": "Spec Team"
