@@ -71,6 +71,8 @@ Explicit rules, not prose. Must cover, where applicable:
 
 Other services, queues, external APIs this feature calls or is called by. What happens if a dependency is unavailable.
 
+If the call pattern spans more than one service/async hop, ask the specialist a single yes/no question before generating anything — "Want me to render this as a sequence diagram via the draw.io connector?" — never generate one unasked. If declined or no diagram-capable MCP tool is connected, describe the flow in prose instead.
+
 ## 7. Security & Permissions
 
 Who can call each endpoint / trigger this logic. What data is restricted and to whom. Any audit-logging expectations.

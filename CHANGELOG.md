@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.2] - 2026-10-07
+
+### Changed
+
+- `hld-builder`: existing-state, business-process, and entity (מאגרי מידע) sections now offer to render a diagram via the draw.io connector when one would help, asking the specialist a yes/no question before generating rather than assuming — with the outcome recorded inline so the offer isn't repeated next session.
+- `lld-mobile-spec`: the State Transitions subsection's draw.io/Figma diagram rendering is now gated behind the same ask-first question instead of generating automatically.
+- `lld-backend-spec`: the Dependencies section now offers a sequence diagram via the draw.io connector for multi-service/async flows, asking before generating.
+
 ## [0.4.1] - 2026-10-06
 
 ### Changed

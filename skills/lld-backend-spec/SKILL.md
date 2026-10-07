@@ -27,7 +27,7 @@ The structure and section rules are in `references/lld_backend_template.md`. Rea
 
 5. **Draft Business Logic & Edge Cases** as explicit rules, not prose paragraphs — validation rules, calculation logic, and the required edge cases: empty/missing input, invalid input, not-found, permission-denied, concurrent-write/race conditions, and partial-failure behavior for any multi-step operation.
 
-6. **Cover the cross-cutting sections** from the template: security & permissions (who can call this, data visibility rules), non-functional notes (rate limits, idempotency, retries, expected latency/throughput if known), backward compatibility (if changing an existing contract), and dependencies on other services.
+6. **Cover the cross-cutting sections** from the template: security & permissions (who can call this, data visibility rules), non-functional notes (rate limits, idempotency, retries, expected latency/throughput if known), backward compatibility (if changing an existing contract), and dependencies on other services. For any multi-service/async flow, follow the diagram-offer rule in the Dependencies section of the template — ask before generating, never assume.
 
 7. **Mark unknowns honestly.** Don't invent a status code, field name, or business rule that wasn't given or found in the codebase — mark it `TBD` or `Need to verify` and add it to Open Questions.
 

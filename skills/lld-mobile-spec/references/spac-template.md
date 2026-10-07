@@ -97,7 +97,7 @@ stateDiagram-v2
 ```
 ````
 
-If a diagram-capable MCP tool is connected (draw.io, or Figma's `generate_diagram` as a fallback — it also accepts `stateDiagram-v2` syntax), use it to render the diagram and link the result here. If no such tool is connected, keep the Mermaid code block directly in this section — it renders inline in most Markdown viewers — rather than skipping the diagram.
+If a diagram-capable MCP tool is connected (draw.io, or Figma's `generate_diagram` as a fallback — it also accepts `stateDiagram-v2` syntax), ask the specialist a single yes/no question before generating anything (e.g. "Want me to render this as a draw.io diagram instead of a Mermaid block?") — never render one unasked. If they decline, or no such tool is connected, keep the Mermaid code block directly in this section — it renders inline in most Markdown viewers — rather than skipping the diagram.
 
 ---
 
