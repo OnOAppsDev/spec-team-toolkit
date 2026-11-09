@@ -19,6 +19,10 @@ Builds one Low Level Design for a **web feature** that frontend developers, back
 - Produces a numbered Markdown LLD (`references/lld_template.md`): the visitor side (component table with separate source and logic columns, a feature-specific responsiveness/accessibility section, acceptance criteria), integration and business rules (rules, cross-system scenarios, new/changed API contracts, data changes) when an API is involved, and the editor side (content structure with exact Umbraco 13 editor types, permissions, workflow, how content reaches the site) when a CMS is involved.
 - Every component, field, rule, scenario, open question, and assumption has an ID, and rows reference IDs instead of repeating content; `scripts/trace_check.py` verifies that every reference resolves and nothing is orphaned before the draft is presented.
 - On request, renders the Markdown to a print-ready RTL HTML page with `scripts/md_to_html.py` (clickable IDs, correct Hebrew/English bidi). The Markdown stays the single source of truth.
+- **Prerequisites:** this plugin bundles no MCP connectors; the skill uses whatever is connected in the analyst's environment.
+  - **Figma:** install the Figma plugin and authorize it once on first use. The Figma MCP server only reads files your account can **edit**, so make sure you have edit access to the design file.
+  - **Optional:** a repository connector (Bitbucket/GitHub) for the codebase scan, and the draw.io connector for sequence diagrams.
+  - Without these, the skill works from screenshots and uploaded files.
 
 ### `lld-mobile-spec`
 Builds the Low Level Design for the **frontend mobile** team (React Native / Native iOS-Android) — called a SPAC by that team.

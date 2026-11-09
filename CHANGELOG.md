@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - an integration section covering business rules, cross-system scenarios, API contracts, data changes, and integrations.
 - `lld-web-backend-spec`: CMS support is now conditional rather than assumed. Umbraco 13 fields must use the exact property-editor names, and table layout for nested or repeating content is left to the analyst.
 - `lld-web-backend-spec`: contract sources depend on the contract. Existing contracts come only from verified sources, and missing details are flagged as open questions. For new or changed contracts, the skill proposes paths, fields, status codes, and error codes that follow repo conventions, marks each value "proposed", and opens one sign-off item for the backend team.
+- `lld-web-backend-spec`: when a Figma link is shared but no Figma connector is available, the skill says so once and offers to continue from screenshots. The README now lists the connectors the skill can use; none are bundled with the plugin.
 - `lld-web-backend-spec`: open questions and assumptions get unique IDs, are listed once per section, and are referenced from the rows they affect instead of duplicated.
 
 ### Added
