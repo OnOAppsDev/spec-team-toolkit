@@ -12,11 +12,17 @@ Builds the High Level Design — the customer-facing scoping document that goes 
 - Drafts into the team's real HLD template (`references/hld_template_structure.md`, exact Hebrew headers) following the status-tag and change-log conventions in `references/draft_conventions.md`.
 - On finalize (only when asked), renders the draft as a Word document and self-reviews it against the full 10-part QA checklist (bundled in `references/hld_qa_review.md`), fixing Critical/High issues before handing it over.
 
-### `lld-web-figma-spec`
-Builds the Low Level Design for the **frontend web** team — the developer/QA-facing component spec derived from a Figma design.
+### `lld-web-backend-spec`
+Builds one Low Level Design for a **web feature** that frontend developers, backend developers, and QA all work from — for web-only features and for combined frontend/backend features.
 
-- Pulls real data from Figma via connected Figma MCP tools (design context, screenshots, variable definitions) rather than asking the user to describe the design by hand.
-- Produces the team's existing two-part format: a content-entry table (Umbraco 13 editor types, API-sourced fields excluded) and a display/behavior table (logic, edge cases, responsiveness, accessibility), following the exact rules in `references/lld_instructions.md`.
+- Interviews the analyst one question at a time, after first reviewing the requirements/HLD, Figma (read-only, falling back to screenshots), API docs, and codebase already available — and skips what those sources already answer. Asks early whether a CMS manages any content; if not, all CMS questions and the editor side are skipped.
+- Produces a numbered Markdown LLD (`references/lld_template.md`): the visitor side (component table with separate source and logic columns, a feature-specific responsiveness/accessibility section, acceptance criteria), integration and business rules (rules, cross-system scenarios, new/changed API contracts, data changes) when an API is involved, and the editor side (content structure with exact Umbraco 13 editor types, permissions, workflow, how content reaches the site) when a CMS is involved.
+- Every component, field, rule, scenario, open question, and assumption has an ID, and rows reference IDs instead of repeating content; `scripts/trace_check.py` verifies that every reference resolves and nothing is orphaned before the draft is presented.
+- On request, renders the Markdown to a print-ready RTL HTML page with `scripts/md_to_html.py` (clickable IDs, correct Hebrew/English bidi). The Markdown stays the single source of truth.
+- **Prerequisites:** this plugin bundles no MCP connectors; the skill uses whatever is connected in the analyst's environment.
+  - **Figma:** install the Figma plugin and authorize it once on first use. The Figma MCP server only reads files your account can **edit**, so make sure you have edit access to the design file.
+  - **Optional:** a repository connector (Bitbucket/GitHub) for the codebase scan, and the draw.io connector for sequence diagrams.
+  - Without these, the skill works from screenshots and uploaded files.
 
 ### `lld-mobile-spec`
 Builds the Low Level Design for the **frontend mobile** team (React Native / Native iOS-Android) — called a SPAC by that team.

@@ -1,6 +1,6 @@
 ---
 name: lld-backend-spec
-description: Use this skill whenever the user wants to write a Low Level Design (LLD) / detailed technical specification for a backend service, API, or data-model change, for handoff to backend developers and QA. Trigger on phrases like "write the backend LLD for X", "spec out this API", "detailed design for this service change", "אפיין את השירות הזה", or whenever someone describes a backend feature (new endpoint, schema change, integration) and wants a structured spec covering the contract, data model, business rules, and edge cases. For web UI components, use `lld-web-figma-spec` instead. For mobile features, use `lld-mobile-spec` instead.
+description: Use this skill whenever the user wants to write a Low Level Design (LLD) / detailed technical specification for a backend service, API, or data-model change, for handoff to backend developers and QA. Trigger on phrases like "write the backend LLD for X", "spec out this API", "detailed design for this service change", "אפיין את השירות הזה", or whenever someone describes a backend feature (new endpoint, schema change, integration) and wants a structured spec covering the contract, data model, business rules, and edge cases. For web UI components, use `lld-web-backend-spec` instead. For mobile features, use `lld-mobile-spec` instead.
 ---
 
 # LLD Backend Spec

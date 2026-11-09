@@ -7,6 +7,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-11-09
+
+### Changed
+
+- `lld-web-figma-spec` renamed to `lld-web-backend-spec` and reworked into one integrated LLD for web features, serving frontend developers, backend developers, and QA. It handles both web-only specs and combined frontend/backend specs.
+- `lld-web-backend-spec`: interviews the analyst one question at a time (adapted from `lld-mobile-spec`), after reviewing the provided materials and embedded screenshots, and skips questions the sources already answer. The CMS question comes early: when no content is CMS-managed, the CMS questions and the editor side are skipped. System-responsibility questions always offer "to be decided by the development team".
+- `lld-web-backend-spec`: new numbered document structure (`references/lld_template.md`) with localized section titles and fixed numbering:
+  - a mandatory change-history table and a single "Document Approved By" field;
+  - a component table with separate source and logic columns;
+  - responsiveness and accessibility moved out of the table into a feature-specific section;
+  - visitor-side and editor-side user stories with acceptance criteria;
+  - an integration section covering business rules, cross-system scenarios, API contracts, data changes, and integrations.
+- `lld-web-backend-spec`: CMS support is now conditional rather than assumed. Umbraco 13 fields must use the exact property-editor names, and table layout for nested or repeating content is left to the analyst.
+- `lld-web-backend-spec`: contract sources depend on the contract. Existing contracts come only from verified sources, and missing details are flagged as open questions. For new or changed contracts, the skill proposes paths, fields, status codes, and error codes that follow repo conventions, marks each value "proposed", and opens one sign-off item for the backend team.
+- `lld-web-backend-spec`: when a Figma link is shared but no Figma connector is available, the skill says so once and offers to continue from screenshots. The README now lists the connectors the skill can use; none are bundled with the plugin.
+- `lld-web-backend-spec`: open questions and assumptions get unique IDs, are listed once per section, and are referenced from the rows they affect instead of duplicated.
+
+### Added
+
+- `lld-web-backend-spec/scripts/trace_check.py`: fails when a referenced ID isn't defined, when an ID is defined twice, or when a defined field, rule, scenario, API operation, or open item is never referenced. Runs before every draft is presented.
+- `lld-web-backend-spec/scripts/md_to_html.py`: renders the Markdown LLD to a standalone RTL HTML page (numbered headings, clickable IDs, print styling) instead of a Word document. The Markdown remains the single source of truth.
+- `lld-web-backend-spec/scripts/selftest.py`: self-check for both scripts.
+
 ## [0.4.2] - 2026-10-07
 
 ### Changed
