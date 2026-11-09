@@ -9,7 +9,7 @@ description: >
   and feed into Claude for technical DD generation. Even if they don't use the word "SPAC", if they're
   describing a mobile (React Native / Native iOS-Android) feature and providing business requirements, Figma links,
   screenshots, Backend DD, Bitbucket repository context, or codebase context — use this skill.
-  For web components, use `lld-web-figma-spec` instead. For backend service/API specs, use `lld-backend-spec` instead.
+  For web components, use `lld-web-backend-spec` instead. For backend service/API specs, use `lld-backend-spec` instead.
 ---
 
 # Create Frontend Spec Skill
