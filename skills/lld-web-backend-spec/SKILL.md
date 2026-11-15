@@ -7,7 +7,7 @@ description: Use this skill whenever the user wants to write a Low Level Design 
 
 ## What this skill does
 
-Guides the spec team, through an interactive interview, to one integrated LLD for a web feature that frontend developers, backend developers, and QA all work from. Depending on the feature, the document covers:
+Guides the spec team, through an interactive interview, to one integrated LLD for a web feature that frontend developers, backend developers, and QA all work from. Every document starts with an **understanding layer** (section 3): each capability of the feature with its business goal, a plain-language description of what it does, and a development-readiness table that says what can be built now and what is blocked. Depending on the feature, the document then covers:
 
 - **The website visitor's side** — every displayed component, its data source, its logic and states, plus feature-specific responsiveness and accessibility notes.
 - **Integration and business rules** — rules, cross-system scenarios, new/changed API contracts, data changes, integrations. Only when the feature calls an API or crosses systems.
@@ -27,6 +27,7 @@ The Markdown file is the single source of truth. HTML is generated from it on re
 - **Keep three ledgers separate from the start:** confirmed decisions, assumptions (`AS-xx`), and open questions — business (`BQ-xx`) and technical (`TQ-xx`). Each item gets its ID when it is first raised.
 - **Never invent** a field name, status code, endpoint, editor type, or business rule for anything that already exists. Mark it "צריך לוודא" (or the document language's equivalent) and reference the open question that covers it. The one exception is a **new or changed API contract or data structure** (sections 5.3–5.4): there, propose values that follow the repo's conventions and mark each judgment-call value "מוצע". Values fixed directly by a documented convention aren't marked (see `references/lld_instructions.md`, section 5.3).
 - **Read-only everywhere.** Figma, repositories, and documentation are inspected, never modified. Never read `.env` files, certificates, keys, tokens, or other secrets, and don't paste large code blocks into the LLD.
+- **Keep reading decisions apart from requirements.** How a source is read (what's valid, superseded, interpreted, or how a conflict was resolved) is recorded as a source-reading rule (`SR-xx`, section 2.2), not inside a business rule. This applies to any source: a detailed spec, an HLD, meeting notes, an email.
 - **Write in the language the analyst uses.** Section titles are localized; section numbers, IDs, technical identifiers, API field names, and data types stay in English.
 
 ## Workflow
@@ -40,6 +41,7 @@ Then report in chat:
 - a short table of sources and their status (read / missing / no access);
 - what the sources show about scope — which of Web UI, Backend, and CMS appear to change;
 - conflicts already found, each recorded as an open item with an ID;
+- source-reading rules already known (which source prevails, what a meeting summary superseded, how a convention in the source is read), and any the project already records centrally;
 - roughly how many questions you expect to ask, so the analyst knows the size of the interview.
 
 When screenshots are embedded in a document, look at them — don't rely on the extracted text alone. Screenshots often contain states, labels, and formatting that the text omits or contradicts (an empty-state message with a different trigger, a disabled row, bullets in a field typed as plain text).
@@ -48,9 +50,10 @@ When screenshots are embedded in a document, look at them — don't rely on the 
 
 Ask only what step 1 left unanswered, in this order:
 
-1. **What changes:** the web UI, the backend (new or changed APIs, data, integrations), the CMS — or which combination.
-2. **CMS gate — ask early:** does a content editor manage any part of this feature? If yes, confirm which CMS and, where relevant, its version (for Umbraco, confirm 13). If no, skip every CMS question and the editor side of the document (section 6 keeps its heading with "לא רלוונטי לפיצ'ר זה" and a one-line reason).
-3. **Existing contracts:** for every backend capability the feature uses, is it existing (give it an `API-xx` entry marked "(קיים)" that links its contract, and reuse it) or new/changed in this feature (specify it in full in section 5.3)? If documentation for an existing contract isn't available, open a `TQ` and mark every dependent field "צריך לוודא".
+1. **What changes:** the web UI, the backend (new or changed APIs, data, integrations), the CMS — or which combination. For the visitor side, distinguish three cases: it exists and has a design; it exists but the design hasn't arrived (section 4 is deferred: `לא רלוונטי בשלב זה – ממתין לעיצוב`); or there is none, because the feature is a process (section 4: `לא רלוונטי לפיצ'ר זה – תהליך ללא ממשק משתמש`). In the last two cases section 3 carries the whole narrative, including acceptance criteria per capability.
+2. **Capabilities:** propose how the feature splits into capabilities (`CAP-xx`) — mechanisms, processes, or user actions that each have their own business goal — and confirm the split with the analyst.
+3. **CMS gate — ask early:** does a content editor manage any part of this feature? If yes, confirm which CMS and, where relevant, its version (for Umbraco, confirm 13). If no, skip every CMS question and the editor side of the document (section 6 keeps its heading with "לא רלוונטי לפיצ'ר זה" and a one-line reason).
+4. **Existing contracts:** for every backend capability the feature uses, is it existing (give it an `API-xx` entry marked "(קיים)" that links its contract, and reuse it) or new/changed in this feature (specify it in full in section 5.3)? If documentation for an existing contract isn't available, open a `TQ` and mark every dependent field "צריך לוודא".
 
 ### 3. Inspect sources read-only
 
@@ -65,6 +68,10 @@ For each displayed value, decide whether it is **editor-managed** (→ a CMS fie
 ### 5. Interview — one question at a time, blocking questions first
 
 Work through the topics below, skipping anything the sources already answer or the scope excludes. Ask blocking questions first: the ones whose answer changes structure, data flow, or what QA tests. Record minor conflicts straight away as open items instead of turning each into a question. At any point the analyst can say "skip to draft"; then everything still unanswered stays an open item with its ID.
+
+**Capabilities (always):** the business goal of each capability — when the sources don't state it, propose a wording and confirm it; who triggers it and who is affected; for capabilities other documents or modules consume, what the consumer supplies and what it gets back; acceptance criteria when section 4 doesn't apply or is deferred.
+
+**Source reading (always):** when a source is ambiguous, contradicts itself, or is superseded by a later source, settle how it's read and record an `SR-xx` — don't leave the reconciliation as text inside a business rule.
 
 **Visitor side (always considered; ask only the topics that apply):** the visitor's goal; entry points and URL parameters (pages, not embeddable components); the main flow; what happens on each action; states (loading, success, empty, error, partial failure) for anything that loads data; desktop/mobile differences that aren't standard; accessibility needs the framework doesn't already cover. Don't ask "what is out of scope" as its own question: derive it from the materials and answers, and confirm it in the readiness check.
 
@@ -84,11 +91,11 @@ How to ask:
 
 ### 6. Readiness check
 
-Before drafting, give a short summary in chat: which sections apply, what's confirmed, which open items will appear in the draft, and whether anything blocks drafting. Then draft — open items don't block a DRAFT, they're listed in it.
+Before drafting, give a short summary in chat: which sections apply, what's confirmed, which open items will appear in the draft, whether anything blocks drafting, and a preview of the development-readiness table (3.4): each capability as buildable, partly buildable, or blocked, and by what. Then draft — open items don't block a DRAFT, they're listed in it.
 
 ### 7. Draft the LLD
 
-Write `lld_<feature>.md` following `references/lld_template.md` and `references/lld_instructions.md`. Status is **DRAFT**. Every behavior lives in the row of the component, field, rule, or scenario it belongs to. Open items and assumptions are listed once, at the end of the section they belong to, and referenced by ID from every row they affect. An item that affects more than one section is listed in the section of the row it affects most and referenced from the others. Items about sections 1–3 are listed in 4.7.
+Write `lld_<feature>.md` following `references/lld_template.md` and `references/lld_instructions.md`. Status is **DRAFT**. Every behavior lives in the row of the component, field, rule, or scenario it belongs to. Open items and assumptions are listed once, at the end of the section they belong to, and referenced by ID from every row they affect. An item that affects more than one section is listed in the section of the row it affects most and referenced from the others. Items about sections 1–3 are listed in 4.7, or in 5.6 when section 4 doesn't apply or is deferred. Every row blocked by an open item says so in the row itself ("חסום – `BQ-xx`").
 
 ### 8. Verify before presenting
 
@@ -96,15 +103,17 @@ Write `lld_<feature>.md` following `references/lld_template.md` and `references/
    ```
    python3 scripts/trace_check.py lld_<feature>.md
    ```
-   It fails on any referenced ID that isn't defined, on any ID defined twice, and on any field, rule, scenario, API operation, open item, or assumption that nothing references outside its own definition line. It warns about gaps in open-item numbering.
-2. Check coverage by hand: every Figma frame or screenshot, interactive element, API operation, and content rule found in steps 1–4 is in the document or explicitly listed as out of scope. Don't drop anything silently.
-3. Check that no CMS field exists for a fixed or API-supplied value, and that every editor type is a real editor of the confirmed CMS version (for Umbraco 13, see the list in `references/lld_instructions.md`).
-4. Check that every API-sourced component states when the call happens and its success, empty, error, and partial-failure behavior.
-5. Check that every proposed value in a new or changed contract is marked "מוצע" next to the value itself, and that one contract sign-off `TQ` owned by the backend team covers them.
+   It fails on any referenced ID that isn't defined, on any ID defined twice, and on any capability, source-reading rule, field, rule, scenario, API operation, open item, or assumption that nothing references outside its own definition line. It warns about gaps in open-item and source-reading-rule numbering.
+2. Check the understanding layer: every `CAP-xx` has a business goal and a description a reader who missed the interview can follow, and acceptance criteria when section 4 doesn't apply or is deferred; every `BR-xx` and `SC-xx` sits under a capability; every capability appears in the readiness table, and every open item that affects implementation appears in its dependency column.
+3. Check the rules are clean and self-contained: the "פירוט" column of 5.1 describes behavior only (no source reconciliation — that goes to the "מקור" column or an `SR-xx`); every scenario with more than one action has steps; every source section whose content a developer needs (value lists, type catalogs, wording) is spelled out, not just cited.
+4. Check coverage by hand: every Figma frame or screenshot, interactive element, API operation, and content rule found in steps 1–4 is in the document or explicitly listed as out of scope. Don't drop anything silently.
+5. Check that no CMS field exists for a fixed or API-supplied value, and that every editor type is a real editor of the confirmed CMS version (for Umbraco 13, see the list in `references/lld_instructions.md`).
+6. Check that every API-sourced component states when the call happens and its success, empty, error, and partial-failure behavior.
+7. Check that every proposed value in a new or changed contract is marked "מוצע" next to the value itself, and that one contract sign-off `TQ` owned by the backend team covers them.
 
 ### 9. Present, iterate, and finalize
 
-Present the draft and the remaining open items. Apply the analyst's corrections to the Markdown file, then re-run step 8. Add a change-history row whenever a version is shared.
+Present the draft, the readiness table, and the remaining open items. Apply the analyst's corrections to the Markdown file, then re-run step 8. Add a change-history row whenever a version is shared.
 
 - **HTML on request:** `python3 scripts/md_to_html.py lld_<feature>.md` writes `lld_<feature>.html` next to it — RTL by default (`--lang en` for an English document), with numbered headings, readable tables, clickable IDs, and print styling. Regenerate it after every Markdown change; never edit the HTML by hand.
 - **READY only on explicit approval** from the analyst. Confidence or a passing check isn't approval.

@@ -3,20 +3,21 @@
 Fails (exit 1) when:
 - an ID is referenced but never defined;
 - an ID is defined more than once;
-- a field, rule, scenario, API operation, open question, or assumption is defined but nothing
-  references it outside its own definition line. UI components are exempt (they are the top of the
+- a capability, source-reading rule, field, rule, scenario, API operation, open question, or
+  assumption is defined but nothing references it outside its own definition line. UI components are exempt (they are the top of the
   trace), and so are closed items (definition line contains "נסגר" or "Closed").
-Gaps in open-item and assumption numbering (BQ, TQ, AS) are reported as a warning: close them
+Gaps in open-item, assumption and source-reading-rule numbering (BQ, TQ, AS, SR) are reported as a warning: close them
 before the first share, then keep IDs stable. UI and CMS IDs may be numbered in blocks (CMS-01.., CMS-20..).
 
 Usage: python3 trace_check.py lld_<feature>.md
+Codes: CAP (capability, 3.1), SR (source-reading rule, 2.2), UI, CMS, BR, SC, API, BQ, TQ, AS.
 Definitions are a table row's first cell (| UI-01 |), a list item starting with the code
-(- `BQ-01` ...), or a heading starting with the code (#### SC-01 – ...).
+(- `BQ-01` ...), or a heading starting with the code (#### SC-01 – ..., #### CAP-01 – ...).
 """
 import re, sys
 from collections import Counter, defaultdict
 
-ID = r'(?:UI|CMS|API|BR|SC|BQ|TQ|AS)-\d{2}'
+ID = r'(?:UI|CMS|API|BR|SC|BQ|TQ|AS|CAP|SR)-\d{2}'
 DEF_PATTERNS = (rf'^\| ({ID}) \|.*$', rf'^\s*- `({ID})`.*$', rf'^#+ ({ID})\b.*$')
 
 
@@ -46,7 +47,7 @@ def check(text):
     for i in defs:
         prefix, n = i.rsplit('-', 1)
         numbers[prefix].add(int(n))
-    gaps = sorted(f'{p}-{n:02d}' for p, ns in numbers.items() if p in ('BQ', 'TQ', 'AS') for n in range(1, max(ns)) if n not in ns)
+    gaps = sorted(f'{p}-{n:02d}' for p, ns in numbers.items() if p in ('BQ', 'TQ', 'AS', 'SR') for n in range(1, max(ns)) if n not in ns)
     return undefined, sorted(set(duplicates)), unused, gaps
 
 

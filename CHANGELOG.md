@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-11-15
+
+### Added
+
+- `lld-web-backend-spec`: capabilities (`CAP-xx`, section 3.1). Each capability gets a business goal, a plain-language description, who triggers it and who is affected, and acceptance criteria when section 4 doesn't apply or is deferred. Business rules in 5.1 are grouped by capability.
+- `lld-web-backend-spec`: development-readiness table (new section 3.4) with one row per capability: buildable, partly buildable, or blocked, and what it depends on. Blocked rows are also marked in place ("חסום – `BQ-xx`").
+- `lld-web-backend-spec`: source-reading rules (`SR-xx`, new section 2.2) record how a source is read (precedence, supersession, interpretation, conflict resolution, ignored parts) apart from requirements. Section 2 becomes 2.1 (sources and legend) and 2.2; table 5.1 gains a "מקור" column, and "פירוט" holds behavior only.
+
+### Changed
+
+- `lld-web-backend-spec`: process-only features keep section 4 with "לא רלוונטי לפיצ'ר זה – תהליך ללא ממשק משתמש", and their scenarios state who receives the result instead of what the visitor sees.
+- `lld-web-backend-spec`: scenario steps are mandatory when a scenario has more than one action; the document must be self-contained (source content a developer needs is spelled out, not only cited); obligations placed on other documents are a separate group at the end of 5.1.
+- `lld-web-backend-spec/scripts`: `trace_check.py` and `md_to_html.py` recognize `CAP` and `SR` IDs; `SR` numbering gaps are warned about; `selftest.py` covers both codes.
+
 ## [0.5.0] - 2026-11-09
 
 ### Changed
