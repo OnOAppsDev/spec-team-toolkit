@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.6.1] - 2026-11-15
+
+### Fixed
+
+- `lld-web-backend-spec`: skill description shortened to under 1024 characters, so claude.ai no longer truncates it and the pointers to `lld-mobile-spec` and `lld-backend-spec` are kept.
+
 ## [0.6.0] - 2026-11-15
 
 ### Added
