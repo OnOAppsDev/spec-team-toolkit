@@ -7,12 +7,12 @@ Usage: python3 md_to_html.py lld_<feature>.md [-o out.html] [--lang he|en]
 
 Supports the Markdown subset the LLD template uses: headings, paragraphs, bold, inline code,
 links, images, pipe tables (with hierarchy group rows), bullet lists, blockquotes, fenced code
-blocks, and <br> inside table cells. Traceability IDs (UI-01, CMS-03, ...) become links to their
+blocks, and <br> inside table cells. Traceability IDs (CAP-01, SR-01, UI-01, CMS-03, ...) become links to their
 definitions.
 """
 import argparse, html, os, re
 
-ID = re.compile(r'(?:UI|CMS|API|BR|SC|BQ|TQ|AS)-\d{2}')
+ID = re.compile(r'(?:UI|CMS|API|BR|SC|BQ|TQ|AS|CAP|SR)-\d{2}')
 
 CSS = """
 :root { --ink:#1d2433; --muted:#5b6475; --line:#d9dee7; --head:#f2f5f9; --accent:#0b6e99; }
